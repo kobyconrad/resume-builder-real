@@ -1,14 +1,62 @@
-import React from "react";
+import React, { useState } from "react";
+import { useSharedState, RoomServiceProvider } from "@roomservice/react";
 
-function ResumeForm() {
+// sets the interface for the SharedState, types of values accepted into the state
+interface SharedState {
+  number: number;
+  string: string;
+  resume: string;
+}
+
+interface Resume {
+  firstName: string;
+  lastName: string;
+}
+
+function ResumeFormApp() {
+  // <SharedState> sets the type of values that the state will accept tsx (generic syntax)
+  const [sharedState, setSharedState] = useSharedState<SharedState>(
+    "resume-builder-final"
+  );
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+
+  function handleFirstName(event) {
+    setFirstName(event.target.value);
+  }
+
+  function handleLastName(event) {
+    setLastName(event.target.value);
+  }
+
+  function updateResume() {
+    setSharedState((prevDoc) => {
+      if (!prevDoc.resume) {
+        prevDoc.resume = JSON.stringify({ firstName: "", lastName: "" });
+      }
+
+      var resumeObj = { firstName, lastName };
+      var jsonObj = JSON.stringify(resumeObj);
+
+      prevDoc.resume = jsonObj;
+    });
+  }
+
+  function onClick() {
+    setSharedState((prevDoc) => {
+      prevDoc.number = Math.floor(Math.random() * 100);
+    });
+  }
+
   return (
     <div className="formContainer">
       <div className="inputContainer">
         <div className="labelName">First Name</div>
         <textarea
           placeholder="e.g. John"
-          // value={}
-          // onChange={}
+          value={firstName}
+          onChange={handleFirstName}
         ></textarea>
       </div>
 
@@ -16,10 +64,22 @@ function ResumeForm() {
         <div className="labelName">Last Name</div>
         <textarea
           placeholder="e.g. Smith"
-          // value={}
-          // onChange={}
+          value={lastName}
+          onChange={handleLastName}
         ></textarea>
       </div>
+
+      <button
+        onClick={() => {
+          updateResume();
+        }}
+      >
+        Submit
+      </button>
+
+      {/* {firstName}
+      {lastName} */}
+      {sharedState.resume || ""}
 
       <style jsx>{`
         textarea {
@@ -29,6 +89,10 @@ function ResumeForm() {
           line-height: 30px;
           padding-left: 10px;
           font-size: 14px;
+        }
+        button {
+          width: 100px;
+          height: 30px;
         }
         .formContainer {
           width: 400px;
@@ -52,4 +116,8 @@ function ResumeForm() {
   );
 }
 
-export default ResumeForm;
+export default () => (
+  <RoomServiceProvider authUrl={"http://localhost:3000/api/roomservice"}>
+    <ResumeFormApp />
+  </RoomServiceProvider>
+);
