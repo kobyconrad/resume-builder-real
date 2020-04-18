@@ -1,5 +1,6 @@
 import { useSharedState, RoomServiceProvider } from "@roomservice/react";
 import React from "react";
+import ResumeForm from "../components/resumeForm";
 
 const sendGet = () => {
   fetch("http://localhost:3000/")
@@ -13,21 +14,12 @@ const sendGet = () => {
 };
 
 const App = () => {
-  const [sharedState, setSharedState] = useSharedState("my-room");
-
-  function onClick() {
-    setSharedState((prevDoc) => {
-      prevDoc.number = Math.floor(Math.random() * 100);
-    });
-  }
+  const [sharedState, setSharedState] = useSharedState("resume-builder-final");
 
   return (
     <div>
-      <h1>Open multiple browser windows!</h1>
+      <h1>Resume Builder</h1>
 
-      <p>{sharedState.number || 0}</p>
-
-      <button onClick={onClick}>Pick Random Number</button>
       <button
         onClick={() => {
           sendGet();
@@ -35,6 +27,8 @@ const App = () => {
       >
         Send GET Request
       </button>
+
+      <ResumeForm />
     </div>
   );
 };
