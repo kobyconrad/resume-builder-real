@@ -1,11 +1,22 @@
 import { useSharedState, RoomServiceProvider } from "@roomservice/react";
 import React from "react";
 
+const sendGet = () => {
+  fetch("http://localhost:3000/")
+    .then((response) => {
+      console.log("sent get request");
+      console.log(response);
+    })
+    .then((data) => {
+      console.log(data);
+    });
+};
+
 const App = () => {
   const [sharedState, setSharedState] = useSharedState("my-room");
 
   function onClick() {
-    setSharedState(prevDoc => {
+    setSharedState((prevDoc) => {
       prevDoc.number = Math.floor(Math.random() * 100);
     });
   }
@@ -17,6 +28,13 @@ const App = () => {
       <p>{sharedState.number || 0}</p>
 
       <button onClick={onClick}>Pick Random Number</button>
+      <button
+        onClick={() => {
+          sendGet();
+        }}
+      >
+        Send GET Request
+      </button>
     </div>
   );
 };
