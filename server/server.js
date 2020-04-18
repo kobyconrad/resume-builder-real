@@ -1,5 +1,13 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
+const bodyParser = require("body-parser");
+
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// converst a buffer/binary into a json object
+app.use(bodyParser.json());
 
 app.listen(3000, () => {
   console.log("listing on port 3000 (probably)");
@@ -18,6 +26,14 @@ app.get("/download", (req, res) => {
   console.log("youll DL a resume here later");
 
   // this lets me send a GET request from diff domain, set to client domain later
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.end();
+});
+
+app.post("/buildResume", (req, res) => {
+  console.log("triggered POST");
+  console.log(req.body);
+
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.end();
 });

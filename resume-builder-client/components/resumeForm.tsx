@@ -30,7 +30,25 @@ function ResumeFormApp() {
     setLastName(event.target.value);
   }
 
+  function sendPost() {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: sharedState.resume,
+    };
+
+    fetch("http://localhost:3000/buildResume", requestOptions)
+      .then((response) => {
+        console.log("sent get request");
+        console.log(response);
+      })
+      .then((data) => {
+        console.log(data);
+      });
+  }
+
   function updateResume() {
+    console.log("prevState: ", sharedState.resume);
     setSharedState((prevDoc) => {
       if (!prevDoc.resume) {
         prevDoc.resume = JSON.stringify({ firstName: "", lastName: "" });
@@ -40,12 +58,9 @@ function ResumeFormApp() {
       var jsonObj = JSON.stringify(resumeObj);
 
       prevDoc.resume = jsonObj;
-    });
-  }
 
-  function onClick() {
-    setSharedState((prevDoc) => {
-      prevDoc.number = Math.floor(Math.random() * 100);
+      console.log("newState: ", sharedState.resume);
+      sendPost();
     });
   }
 
