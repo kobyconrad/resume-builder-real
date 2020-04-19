@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const fs = require("fs");
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -33,6 +34,11 @@ app.get("/download", (req, res) => {
 app.post("/buildResume", (req, res) => {
   console.log("triggered POST");
   console.log(req.body);
+
+  fs.writeFile(`${__dirname}/resume.json`, JSON.stringify(req.body), (err) => {
+    if (err) throw err;
+    console.log("resume file has been written");
+  });
 
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.end();
