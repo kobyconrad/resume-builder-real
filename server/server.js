@@ -3,6 +3,7 @@ const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const fs = require("fs");
+const { exec } = require("child_process");
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -28,6 +29,7 @@ app.get("/download", (req, res) => {
 
   // this lets me send a GET request from diff domain, set to client domain later
   res.setHeader("Access-Control-Allow-Origin", "*");
+  res.sendFile("http://localhost:4000/resume.pdf.html");
   res.end();
 });
 
@@ -37,6 +39,7 @@ app.post("/buildResume", (req, res) => {
 
   fs.writeFile(`${__dirname}/resume.json`, JSON.stringify(req.body), (err) => {
     if (err) throw err;
+    exec("hackmyresume BUILD resume.json");
     console.log("resume file has been written");
   });
 

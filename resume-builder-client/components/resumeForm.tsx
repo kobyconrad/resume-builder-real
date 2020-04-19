@@ -54,7 +54,13 @@ function ResumeFormApp() {
         prevDoc.resume = JSON.stringify({ firstName: "", lastName: "" });
       }
 
-      var resumeObj = { firstName, lastName };
+      var resumeObj = {
+        name: firstName + " " + lastName,
+        meta: {
+          format: "FRESH@0.6.0",
+          version: "0.1.0",
+        },
+      };
       var jsonObj = JSON.stringify(resumeObj);
 
       prevDoc.resume = jsonObj;
@@ -95,6 +101,10 @@ function ResumeFormApp() {
       {/* {firstName}
       {lastName} */}
       {sharedState.resume || ""}
+
+      <a href="resume.pdf" download="out/resume">
+        <button type="button">Download</button>
+      </a>
 
       <style jsx>{`
         textarea {

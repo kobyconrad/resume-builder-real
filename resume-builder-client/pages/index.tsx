@@ -3,9 +3,8 @@ import React from "react";
 import ResumeForm from "../components/resumeForm";
 
 const sendGet = () => {
-  fetch("http://localhost:3000/")
+  fetch("http://localhost:3000/download")
     .then((response) => {
-      console.log("sent get request");
       console.log(response);
     })
     .then((data) => {
